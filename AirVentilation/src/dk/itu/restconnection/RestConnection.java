@@ -1,11 +1,13 @@
 package dk.itu.restconnection;
 
-public class RestConnection {
+public class RestConnection {	
+	
 	public static void main(String[] args) {
 
 		RestClient rc = new RestClient();
-		System.out.println(rc.getRestData("http://gsd.itu.dk/api/user/building/entry/description/3/?format=json"));
+		//System.out.println(rc.getBuildingPlan().getRooms().get(0).getNumAC());
+		Measurement m = rc.getMeasurement("room-0-ac-0-gain");
+		System.out.println(m.getValue());
 		System.out.println("Check");
 	}
-
 }
