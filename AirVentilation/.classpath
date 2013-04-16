@@ -13,6 +13,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/AirVentilation/gson-2.2.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Psymon/Documents/GitHub/Project/AirVentilation/servlet-api.jar"/>
+	<classpathentry kind="lib" path="servlet-api.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
