@@ -1,7 +1,21 @@
 $(document).ready(function() {
 drawGraph();
 bindHover();
+getGraphData();
 });
+
+function getGraphData()
+{
+$.ajax({  
+    type: "GET",  
+    url: "mainservlet",  
+    data: "cmd=restcall",  
+    success: function(result){  
+      alert(result);
+    }                
+  });  
+}
+
 function drawGraph()
 {
 	var sin = [],

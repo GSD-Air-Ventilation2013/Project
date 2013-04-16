@@ -4,8 +4,8 @@
 <section id="content" class="body">
 	<h2>RestCall information</h2>
 	<%
-		Measurement measurement = (Measurement) request.getAttribute("Measurement");
-		out.print(measurement.getUuid());
+		Measurement[] measurements = (Measurement[]) request.getAttribute("Measurement");
+		out.print(measurements[0].getUuid());
 	%>
 </section>
 <jsp:include page="footer.jsp" flush="true" />
