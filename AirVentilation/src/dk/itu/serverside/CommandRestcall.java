@@ -13,8 +13,8 @@ public class CommandRestcall extends Command {
 
 	public String execute(HttpServletRequest request) {
 		RestClient client = new RestClient();
-		Measurement plan = client.getMeasurement("floor-0-room-1.temp");
-		request.setAttribute("Measurement", plan);
+		Measurement[] temperatures = client.getMeasurements("floor-0-room-1.temp", 5);
+		request.setAttribute("Measurement", temperatures);
 		return next;
 	}
 }
