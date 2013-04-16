@@ -29,10 +29,10 @@ public class RestClient {
 	
 	public Measurement[] getMeasurements(String uuid, int numOfMinutes) {
 		//Measurements are taken every 15 seconds. Request limit is calculated.
-		String limit = Integer.toString(numOfMinutes * 4);
+		String limit = Integer.toString(numOfMinutes * 4 + 1);
 		
 		Gson gson = new GsonBuilder()
-		.registerTypeAdapter(Measurement.class, new MeasurementDeserializer())
+		.registerTypeAdapter(Measurement[].class, new MeasurementDeserializer())
 		.create();
 		
 		String json = getJsonString(MEASURE_URL, limit, uuid);

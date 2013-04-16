@@ -21,13 +21,15 @@ public class MeasurementDeserializer implements JsonDeserializer<Measurement[]>
 		
 		Measurement temp;
 		JsonObject jsonMeasurement;
-		for(int i = 0; i< array.size(); i++)
+		int count = array.size();
+		for(int i = 0; i < array.size(); i++)
 		{
 			temp = new Measurement();
 			jsonMeasurement = array.get(i).getAsJsonObject();
 			temp.setUuid(jsonMeasurement.getAsJsonPrimitive("uuid").getAsString());
 			temp.setValue(jsonMeasurement.getAsJsonPrimitive("val").getAsDouble());
 			temp.setTimestamp(jsonMeasurement.getAsJsonPrimitive("timestamp").getAsString());
+			measurements[--count] = temp;
 		}
 		
 		return measurements;
