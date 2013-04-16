@@ -4,6 +4,7 @@
 <section id="content" class="body">
 	<h2>Visual representation</h2>
 	<p>Here goes simon widget</p>
+	<div id="graphDiv" ></div>
 </section>
 
 <section id="content" class="body">

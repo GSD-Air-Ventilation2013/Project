@@ -6,6 +6,10 @@
 <title>Building Control</title>
 <meta charset="utf-8" />
 <link rel="stylesheet" href="<%= request.getContextPath() %>/Views/css/style.css" type="text/css" />
+<link rel="stylesheet" href="<%= request.getContextPath() %>/Views/css/graphs.css" type="text/css" />
+<script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/jquery.flot.min.js" ></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/measurementGraph.js" ></script>
 </head>
 <body id="index" class="home">
 <header id="banner" class="body">

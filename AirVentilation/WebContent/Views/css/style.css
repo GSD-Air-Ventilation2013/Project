@@ -84,22 +84,24 @@ cite {}
 q {}
 
 /* Tables */
-table {margin: .5em auto 1.5em auto; width: 98%;}
+
+// omitted, because it fucked up jflot
+//table {margin: .5em auto 1.5em auto; width: 98%;}
 	
 	/* Thead */
-	thead th {padding: .5em .4em; text-align: left;}
-	thead td {}
+	//thead th {padding: .5em .4em; text-align: left;}
+	//thead td {}
 
 	/* Tbody */
-	tbody td {padding: .5em .4em;}
-	tbody th {}
+	//tbody td {padding: .5em .4em;}
+	//tbody th {}
 	
-	tbody .alt td {}
-	tbody .alt th {}
+	//tbody .alt td {}
+	//tbody .alt th {}
 	
 	/* Tfoot */
-	tfoot th {}
-	tfoot td {}
+//	tfoot th {}
+//	tfoot td {}
 	
 /* HTML5 tags */
 header, section, footer,
