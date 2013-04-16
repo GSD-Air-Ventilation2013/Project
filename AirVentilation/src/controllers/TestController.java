@@ -2,7 +2,6 @@ package controllers;
 import java.io.IOException;
 
 import dk.itu.restconnection.*;
-import java.util.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,9 +18,9 @@ public class TestController extends HttpServlet {
              HttpServletResponse response) 
              throws IOException, ServletException {
 		 RestClient client = new RestClient();
-		 Measurement plan = client.getMeasurement("floor-0-room-1.temp");
+		 Measurement[] temperatures = client.getMeasurements("floor-0-room-1.temp", 2);
 		 
-		 request.setAttribute("Measurement", plan);
+		 request.setAttribute("Measurement", temperatures);
 		 RequestDispatcher view = request.getRequestDispatcher("Views/TestView.jsp");
 		 view.forward(request, response); 
 }

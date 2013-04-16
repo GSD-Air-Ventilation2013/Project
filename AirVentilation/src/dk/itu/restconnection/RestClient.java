@@ -13,7 +13,7 @@ import com.google.gson.GsonBuilder;
 public class RestClient {
 	
 	static final String BUILDINGINFO_URL = "http://gsd.itu.dk/api/user/building/entry/description/3/?format=json";
-	static final String MEASURE_URL = "http://gsd.itu.dk/api/user/measurement/?bid=3&limit=1&order_by=-timestamp&format=json&uuid=";
+	static final String MEASURE_URL = "http://gsd.itu.dk/api/user/measurement/?bid=3&limit=%s&order_by=-timestamp&format=json&uuid=%s";
 	
 	BufferedReader br = null;
 	BuildingPlan building;
@@ -27,21 +27,24 @@ public class RestClient {
 		return gson.fromJson(json, BuildingPlan.class);	
 	}
 	
-	public Measurement getMeasurement(String uuid) {
+	public Measurement[] getMeasurements(String uuid, int numOfMinutes) {
+		//Measurements are taken every 15 seconds. Request limit is calculated.
+		String limit = Integer.toString(numOfMinutes * 4);
+		
 		Gson gson = new GsonBuilder()
 		.registerTypeAdapter(Measurement.class, new MeasurementDeserializer())
 		.create();
 		
-		String json = getJsonString(MEASURE_URL + uuid);
-		//FOR TESTING PURPOSES TO ELIMINATE LONG RESPONSE TIMES.
-		//String json = "{\"meta\": {\"limit\": 1, \"next\": \"/api/user/measurement/?limit=1&uuid=room-0-ac-0-gain&format=json&order_by=-timestamp&bid=3&offset=1\", \"offset\": 0, \"previous\": null, \"total_count\": 24057}, \"objects\": [{\"bid\": 3, \"id\": \"152834984\", \"resource_uri\": \"/api/user/measurement/152834984/\", \"timestamp\": \"2013-03-19T11:19:18+00:00\", \"uuid\": \"room-0-ac-0-gain\", \"val\": 0.0}]}";
-		return gson.fromJson(json, Measurement.class);
+		String json = getJsonString(MEASURE_URL, limit, uuid);
+		return gson.fromJson(json, Measurement[].class);
 	}
 	
-	
-	private String getJsonString(String url) {
+	private String getJsonString(String url, String... params ) {
 
 		try {
+			//Inject parameters into URL.
+			url = String.format(url, params);
+			
 			// connecting to restAPI
 			HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
 			conn.setRequestMethod("GET");

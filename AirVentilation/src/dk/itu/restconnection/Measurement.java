@@ -3,6 +3,7 @@ package dk.itu.restconnection;
 public class Measurement {
 	private String uuid;
 	private double value;
+	private String timestamp;
 	
 	public String getUuid() {
 		return uuid;
@@ -15,5 +16,11 @@ public class Measurement {
 	}
 	public void setValue(double value) {
 		this.value = value;
+	}
+	public String getTimestamp() {
+		return timestamp;
+	}
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 }
