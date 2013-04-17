@@ -1,22 +1,68 @@
 $(document).ready(function() {
-drawGraph();
-bindHover();
 getGraphData();
+
 });
 
 function getGraphData()
 {
 $.ajax({  
     type: "GET",  
-    url: "mainservlet",  
+    url: "ajaxcontroller",  
     data: "cmd=restcall",  
+    contentType: "application/json",
     success: function(result){  
-      alert(result);
-    }                
+      drawGraph(result);
+    },
+    error:function(result){
+        alert("failure");
+    }                  
   });  
 }
 
-function drawGraph()
+function getTempAndDate(data)
+{
+	var returnData = [];
+	for (var i = 0; i < data.length; i++) {
+		returnData.push([new Date(data[i].timestamp).getTime(), data[i].value]);
+	}
+	
+	return returnData;
+}
+
+function drawGraph(data)
+{
+	var realData = getTempAndDate(data);
+	
+	var plot = $.plot("#graphDiv", [
+	                            	{ data: realData, label: "Temperature"}
+	                            ], {
+	                            	series: {
+	                            		lines: {
+	                            			show: true
+	                            		},
+	                            		points: {
+	                            			show: true
+	                            		}
+	                            	},
+	                            	grid: {
+	                            		hoverable: true,
+	                            		clickable: true
+	                            	},
+	                            	xaxis: {
+	                            	      mode: "time",
+	                            	      timeformat: "%H:%M:%S",
+	                            	      timezone: "browser"
+	                            	  },
+	                            	  
+	                            	width: 700,
+	                            	height: 350
+	                            });
+	
+
+	bindHover();
+}
+
+function drawGraphOLD()
 {
 	var sin = [],
 	cos = [];
@@ -72,11 +118,11 @@ $("#graphDiv").bind("plothover", function (event, pos, item) {
 			previousPoint = item.dataIndex;
 
 			$("#tooltip").remove();
-			var x = item.datapoint[0].toFixed(2),
+			var x = item.datapoint[0],
 			y = item.datapoint[1].toFixed(2);
 
 			showTooltip(item.pageX, item.pageY,
-			    item.series.label + " of " + x + " = " + y);
+			    item.series.label + ": " + y + " </br>Timestamp: " + new Date(x));
 		}
 	} else {
 		$("#tooltip").remove();
