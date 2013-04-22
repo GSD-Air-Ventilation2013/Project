@@ -14,7 +14,7 @@ import com.google.gson.GsonBuilder;
 public class RestClient {
 	
 	static final String BUILDINGINFO_URL = "http://gsd.itu.dk/api/user/building/entry/description/3/?format=json";
-	static final String MEASURE_URL = "http://gsd.itu.dk/api/user/measurement/?bid=3&limit=%s&order_by=-timestamp&format=json&uuid=%s";
+	static final String MEASURE_URL = "http://gsd.itu.dk/api/user/measurement/?bid=3&limit=%25s&order_by=-timestamp&format=json&uuid=%s";
 	
 	BufferedReader br = null;
 	BuildingPlan building;
@@ -45,7 +45,7 @@ public class RestClient {
 		try {
 			//Inject parameters into URL.
 			url = String.format(url, params);
-			
+			url = url.replaceAll("\\s","");
 			// connecting to restAPI
 			HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
 			conn.setRequestMethod("GET");
