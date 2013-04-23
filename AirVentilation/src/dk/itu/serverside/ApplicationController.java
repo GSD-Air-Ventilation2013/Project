@@ -16,6 +16,7 @@ public class ApplicationController {
 	private ApplicationController() {
 		try {
 			commands.put("restcall", new CommandRestcall("Views/restcallresult.jsp"));
+			commands.put("setVentilationGain", new CommandSetVentilationGain("Views/restcallresult.jsp"));
 		} catch (Exception e) {
 			System.out.println("Exception in Application Controller- Panic Situation");
 		}

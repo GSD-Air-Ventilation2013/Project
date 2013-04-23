@@ -15,7 +15,7 @@ public class RestClient {
 	
 	static final String BUILDINGINFO_URL = "http://gsd.itu.dk/api/user/building/entry/description/3/?format=json";
 	static final String MEASURE_URL = "http://gsd.itu.dk/api/user/measurement/?bid=3&limit=%25s&order_by=-timestamp&format=json&uuid=%s";
-	
+	static final String SET_URL = "http://gsd.itu.dk/api/user/building/entry/set/3/%s/%s/?format=json";
 	BufferedReader br = null;
 	BuildingPlan building;
 	
@@ -28,6 +28,15 @@ public class RestClient {
 		return gson.fromJson(json, BuildingPlan.class);	
 	}
 	
+	public String setGain(String uuid, String value)
+	{
+		Gson gson = new GsonBuilder().create();
+		
+		String json = getJsonString("SET", SET_URL, uuid, value);
+		
+		return gson.fromJson(json, String.class);
+	}
+	
 	public Measurement[] getMeasurements(String uuid, int numOfMinutes) {
 		//Measurements are taken every 15 seconds. Request limit is calculated.
 		String limit = Integer.toString(numOfMinutes * 4 + 1);
@@ -36,11 +45,11 @@ public class RestClient {
 		.registerTypeAdapter(Measurement[].class, new MeasurementDeserializer())
 		.create();
 		
-		String json = getJsonString(MEASURE_URL, limit, uuid);
+		String json = getJsonString("GET", MEASURE_URL, limit, uuid);
 		return gson.fromJson(json, Measurement[].class);
 	}
 	
-	private String getJsonString(String url, String... params ) {
+	private String getJsonString(String requestType, String url, String... params ) {
 
 		try {
 			//Inject parameters into URL.
@@ -48,7 +57,7 @@ public class RestClient {
 			url = url.replaceAll("\\s","");
 			// connecting to restAPI
 			HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-			conn.setRequestMethod("GET");
+			conn.setRequestMethod(requestType);
 			conn.setRequestProperty("Accept", "application/json");
 
 			// If connection successful

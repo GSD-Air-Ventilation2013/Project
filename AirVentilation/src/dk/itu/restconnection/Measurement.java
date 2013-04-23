@@ -4,6 +4,7 @@ public class Measurement {
 	private String uuid;
 	private double value;
 	private String timestamp;
+	private double relativeHumidity;
 	
 	public String getUuid() {
 		return uuid;
@@ -22,5 +23,14 @@ public class Measurement {
 	}
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+	public void setRelativeHumidity(double rh)
+	{
+		this.relativeHumidity = rh;
+	}
+	
+	public double RelativeHumidity() {
+		return relativeHumidity;
 	}
 }

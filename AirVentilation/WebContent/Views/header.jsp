@@ -7,10 +7,12 @@
 <meta charset="utf-8" />
 <link rel="stylesheet" href="<%= request.getContextPath() %>/Views/css/style.css" type="text/css" />
 <link rel="stylesheet" href="<%= request.getContextPath() %>/Views/css/graphs.css" type="text/css" />
+<link rel="stylesheet" href="<%= request.getContextPath() %>/Views/css/customStyles.css" type="text/css" />
+<link rel="stylesheet" href="<%= request.getContextPath() %>/Views/css/jquery-ui-1.10.2.custom.css" type="text/css" />
 <script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/jquery-1.9.1.min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/jquery.flot.min.js" ></script>
-<script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/measurementGraph.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/jquery.flot.time.min.js" ></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/jquery-ui-1.10.2.custom.min.js" ></script>
 </head>
 <body id="index" class="home">
 <header id="banner" class="body">

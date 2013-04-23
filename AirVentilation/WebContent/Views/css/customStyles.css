@@ -1,0 +1,16 @@
+.readingTable td, th
+{
+	border: 1px solid black;
+	padding: 4px;
+}
+
+.readingTable
+{
+	margin-top:24px;	
+}
+
+#divContent div
+{
+	float: left;
+	margin-right: 120px;
+}

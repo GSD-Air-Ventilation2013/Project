@@ -1,11 +1,19 @@
 package dk.itu.serverside;
 
+import java.awt.List;
+import java.awt.image.ConvolveOp;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sound.sampled.spi.FormatConversionProvider;
+
 import com.google.gson.Gson;
 
 import dk.itu.restconnection.Measurement;
@@ -21,17 +29,48 @@ public class AjaxController extends HttpServlet {
 	{
 		try {
 			String commandname = request.getParameter("cmd");
-
+			
 			Command command = ApplicationController.getInstance().getCommand(commandname);
 			command.execute(request);
-			Measurement[] results = (Measurement[]) request.getAttribute("Measurement");
 			
 			Gson gson = new Gson();
 			response.setContentType("application/json");
 			PrintWriter out = response.getWriter();
-			out.print(gson.toJson(results));
+			
+			if(commandname.equals("restcall"))
+			{
+				// gets temperature measurements
+				Measurement[] initialResults = (Measurement[]) request.getAttribute("Measurement");
+				
+				initialResults = attachRelativeHumidity(initialResults);
+				
+
+				out.print(gson.toJson(initialResults));
+			}
+			
+			if(commandname.equals("setVentilationGain"))
+			{
+				String returnString = (String)request.getAttribute("SetGainStatus");
+				
+				out.print(gson.toJson(returnString));
+			}
+			
 		} catch (Exception ex) {
 		}
+	}
+	
+	private Measurement[] attachRelativeHumidity(Measurement[] initialResults)
+	{
+		HumidityGenerator humidityGen = new HumidityGenerator();
+		
+		Double dewPoint = 10.0;
+		
+		for (Measurement measurement : initialResults) {
+			double temperature = measurement.getValue();
+			measurement.setRelativeHumidity(humidityGen.calculateRelativeHumidity(dewPoint, temperature));
+		}
+		
+		return initialResults;
 	}
 	
 }

@@ -1,6 +1,5 @@
 $(document).ready(function() {
 getGraphData();
-
 });
 
 function getGraphData()
@@ -12,11 +11,21 @@ $.ajax({
     contentType: "application/json",
     success: function(result){  
       drawGraph(result);
+      setLastReading(result);
     },
     error:function(result){
         alert("failure");
     }                  
   });  
+}
+
+function setLastReading(data)
+{
+	var lastTemp = data[data.length-1].value;
+	var lastHum = data[data.length-1].relativeHumidity;
+	
+	$("#tempLastReading").text(lastTemp.toFixed(2) + "°C");
+	$("#humidLastReading").text(lastHum.toFixed(2) + "%");
 }
 
 function getTempAndDate(data)
@@ -29,12 +38,28 @@ function getTempAndDate(data)
 	return returnData;
 }
 
+function getHumidityData(data)
+{
+	var returnData = [];
+	for (var i = 0; i < data.length; i++) {
+		returnData.push([new Date(data[i].timestamp).getTime(), data[i].relativeHumidity]);
+	}
+	
+	return returnData;
+}
+
+function percentFormatter(v, axis) {
+    return v.toFixed(axis.tickDecimals) +"%";
+}
+
 function drawGraph(data)
 {
-	var realData = getTempAndDate(data);
+	var temperatureData = getTempAndDate(data);
+	var humidityData = getHumidityData(data);
 	
 	var plot = $.plot("#graphDiv", [
-	                            	{ data: realData, label: "Temperature"}
+	                            	{ data: temperatureData, label: "Temperature"},
+	                            	{ data: humidityData, label: "Relative Humidity (%)", yaxis: 2}
 	                            ], {
 	                            	series: {
 	                            		lines: {
@@ -49,10 +74,16 @@ function drawGraph(data)
 	                            		clickable: true
 	                            	},
 	                            	xaxis: {
-	                            	      mode: "time",
-	                            	      timeformat: "%H:%M:%S",
-	                            	      timezone: "browser"
+	                            	      mode: "time"
 	                            	  },
+	                            	  yaxes: [{ min: 0 },
+	                            	          {
+	                            		  alignTicksWithAxis: 1,
+	                                      	position: 1,
+	                                      	tickFormatter: percentFormatter
+	                                    }
+	                            	          ],
+	                                          legend: { position: 'ne' },
 	                            	  
 	                            	width: 700,
 	                            	height: 350
