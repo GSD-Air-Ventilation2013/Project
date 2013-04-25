@@ -9,7 +9,8 @@ $(function() {
 				$( "#amount" ).val( ui.value );
 			},
 			stop: function ( event, ui ){
-				setGain(ui.value);
+				var val = ui.value/100;
+				setGain(val.toFixed(1));
 			}
 		});
 		$( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
@@ -20,7 +21,7 @@ function setGain(value)
 	$.ajax({  
 	    type: "GET",  
 	    url: "ajaxcontroller",  
-	    data: "cmd=setVentilationGain",  
+	    data: "cmd=setVentilationGain&gainValue="+value,  
 	    contentType: "application/json",
 	    success: function(result){
 	    	alert("Works!");

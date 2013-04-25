@@ -24,7 +24,7 @@ public class RestClient {
 		.registerTypeAdapter(BuildingPlan.class, new BuildingPlanDeserializer())
 		.create();
 		
-		String json = getJsonString(BUILDINGINFO_URL);
+		String json = getJsonString(BUILDINGINFO_URL, "GET");
 		return gson.fromJson(json, BuildingPlan.class);	
 	}
 	
@@ -32,7 +32,7 @@ public class RestClient {
 	{
 		Gson gson = new GsonBuilder().create();
 		
-		String json = getJsonString("SET", SET_URL, uuid, value);
+		String json = getJsonString(SET_URL, uuid, value);
 		
 		return gson.fromJson(json, String.class);
 	}
@@ -45,11 +45,11 @@ public class RestClient {
 		.registerTypeAdapter(Measurement[].class, new MeasurementDeserializer())
 		.create();
 		
-		String json = getJsonString("GET", MEASURE_URL, limit, uuid);
+		String json = getJsonString(MEASURE_URL, limit, uuid);
 		return gson.fromJson(json, Measurement[].class);
 	}
 	
-	private String getJsonString(String requestType, String url, String... params ) {
+	private String getJsonString(String url, String... params ) {
 
 		try {
 			//Inject parameters into URL.
@@ -57,7 +57,7 @@ public class RestClient {
 			url = url.replaceAll("\\s","");
 			// connecting to restAPI
 			HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-			conn.setRequestMethod(requestType);
+			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
 
 			// If connection successful
