@@ -33,8 +33,8 @@
 	
 <div>
 <form action="">
-<input id="radioOn" type="radio" name="onOff" value="On">On
-<input id="radioOff" type="radio" name="onOff" value="Off">Off
+<input disabled="disabled" id="radioOn" type="radio" name="onOff" value="On" checked="checked">On
+<input disabled="disabled" id="radioOff" type="radio" name="onOff" value="Off">Off
 </form>
 </div>
 </div>

@@ -2,7 +2,7 @@ $(function() {
 		$( "#slider-vertical" ).slider({
 			orientation: "vertical",
 			range: "min",
-			min: 1,
+			min: 0,
 			max: 100,
 			value: 60,
 			slide: function( event, ui ) {
@@ -11,6 +11,17 @@ $(function() {
 			stop: function ( event, ui ){
 				var val = ui.value/100;
 				setGain(val.toFixed(1));
+				
+				if(val == 0)
+					{
+						$("#radioOn").prop('checked', false);
+						$("#radioOff").prop('checked', true);
+					}
+				else
+					{
+						$("#radioOn").prop('checked', true);
+						$("#radioOff").prop('checked', false);
+					}
 			}
 		});
 		$( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
@@ -24,7 +35,6 @@ function setGain(value)
 	    data: "cmd=setVentilationGain&gainValue="+value,  
 	    contentType: "application/json",
 	    success: function(result){
-	    	alert("Works!");
 	    },
 	    error:function(result){
 	        alert("failure");
