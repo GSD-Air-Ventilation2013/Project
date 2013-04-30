@@ -4,6 +4,7 @@ getGraphData();
 
 function getGraphData()
 {
+$('body').css('cursor', 'wait');
 $.ajax({  
     type: "GET",  
     url: "ajaxcontroller",  
@@ -12,6 +13,7 @@ $.ajax({
     success: function(result){  
       drawGraph(result);
       setLastReading(result);
+  	$('body').css('cursor', 'auto');
     },
     error:function(result){
         alert("failure");

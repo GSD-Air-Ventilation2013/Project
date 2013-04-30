@@ -37,6 +37,12 @@ public class AjaxController extends HttpServlet {
 			response.setContentType("application/json");
 			PrintWriter out = response.getWriter();
 			
+			if(commandname.equals("getVentilationGain"))
+			{
+				Measurement[] gainValue = (Measurement[])request.getAttribute("VentilationGain");
+				out.print(gson.toJson(gainValue[0].getValue()));
+			}
+			
 			if(commandname.equals("restcall"))
 			{
 				// gets temperature measurements

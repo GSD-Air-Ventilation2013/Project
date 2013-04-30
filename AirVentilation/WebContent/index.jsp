@@ -26,7 +26,18 @@
 		</table>
 	</div>
 	<p>
-	<label for="amount">Gain:</label>
+	<table>
+	<tr>
+	<td>
+	<label>Gain:</label>
+	</td>
+	</tr>
+	<tr>
+	<td>
+	<label id="lblDisable" style="font-size: xx-small;"></label>
+	</td>
+	</tr>
+	</table>
 	<input type="text" id="amount" style="border: 0; font-weight: bold;">
 	</p>
 	<div id="slider-vertical"></div>
@@ -38,15 +49,6 @@
 </form>
 </div>
 </div>
-</section>
-<section id="content" class="body">
-	<h2>Controls</h2>
-	<form action="mainservlet" method="POST">
-		<input type="hidden" name="cmd" value="restcall" /> <input
-			value="GetRestData" name="apply" type="submit" /> <input
-			value="TurnOn" name="apply" type="submit" /> <input value="TurnOff"
-			name="apply" type="submit" />
-	</form>
 </section>
 
 <jsp:include page="Views/footer.jsp" flush="true" />
