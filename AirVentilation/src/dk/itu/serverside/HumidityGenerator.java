@@ -39,4 +39,86 @@ public class HumidityGenerator
 	{
 		return (calculateActualVaporPressure(dewPoint) / calculateSaturatedVaporPressure(temperature)) * 100;
 	}
+	
+	public double calculatePMV(double temp, double relativeHumidity)
+	{
+		//M (W/m2), Metabolic energy production (58 to 232 W/m2)
+		int M = 70;
+		
+		// W (W/m2), Rate of mechanical work, (normally 0)
+		int W = 0;
+		
+		//v (m/s), Relative air velocity (0.1 to 1 m/s)
+		double v = 0.1;
+		
+		//Ta (C), Ambient air temperature (10-30)
+		double Ta = temp;
+		
+		//Tr (C), Mean radiant temperature (often close to ambient air temperature)
+		double Tr = Ta;
+		
+		//rh (%), Relative humidity
+		double rh = relativeHumidity;
+		
+		//Icl (clo), basic clothing insulation (1 clo = 0.155 W/m2K)
+		double Icl = 1.0;
+		
+		Icl=Icl*0.155;
+		double Ia=0.092*Math.exp(-0.15*v-0.22*W)-0.0045;
+		double Tsk = 35.7-0.0285*M;
+		
+		// Calculation of Pa (Pa) 
+		double Pa = (rh/100)*0.1333*Math.exp(18.6686-4030.183/(Ta+235));
+		
+		// *** Calculation of Dlimneutral and Dlimminimal *** 
+		// Calculation of S (W/m2),fcl (n.d.), hr W/m2C with stepwise iteration 
+		// Initial values !
+		double Tcl = Ta; 
+		double hr = 3; 
+		double S = 0.0; 
+		double ArAdu = 0.77; 
+		int factor = 500; 
+		double Iclr = Icl; 
+		double Balance;
+		double E;
+		double Ediff;
+		double Hres;
+		double R;
+		double C;
+		
+		do
+		{
+		double fcl=1.05+0.65*Icl;
+		E=0.42*((M-W)-58);
+		Ediff=3.05*(0.255*Tsk-3.36-Pa);
+		Hres=1.73E-2*M*(5.867-Pa)+1.4E-3*M*(34-Ta);
+		Tcl=Tsk-Icl*(M-W-E-Ediff-Hres-S);      
+		hr=5.67E-8*0.95*ArAdu*(Math.exp(4*Math.log(273+Tcl))-
+		Math.exp(4*Math.log(273+Tr)))/(Tcl-Tr);
+		double hc=12.1*Math.pow(v,0.5);
+		R = fcl*hr*(Tcl-Tr);
+		C = fcl*hc*(Tcl-Ta);
+		Balance = M-W-E-Ediff-Hres-R-C-S;  
+		if (Balance>0)  {
+			S=S+factor;
+			factor=factor/2;
+		}
+		else {
+			S=S-factor;
+		}     
+		}
+		while (Math.abs(Balance) > 0.01);
+		
+		S = M-W-E-Ediff-Hres-R-C;
+		
+		double PMV =(0.303*Math.exp(-0.036*M)+0.028)*S;
+		return Math.round(PMV*100)/100;
+	}
+	
+	public double calculatePPD(double PMV)
+	{
+		double PPD = 100-95*Math.exp(-0.03353*Math.pow(PMV,4)-0.2179*Math.pow(PMV,2));
+		return Math.round((PPD)*10)/10;
+	}
 }
+
