@@ -48,7 +48,7 @@ public class AjaxController extends HttpServlet {
 				// gets temperature measurements
 				Measurement[] initialResults = (Measurement[]) request.getAttribute("Measurement");
 				
-				initialResults = attachRelativeHumidity(initialResults);
+				initialResults = attachHumanComfort(initialResults);
 				
 
 				out.print(gson.toJson(initialResults));
@@ -65,7 +65,7 @@ public class AjaxController extends HttpServlet {
 		}
 	}
 	
-	private Measurement[] attachRelativeHumidity(Measurement[] initialResults)
+	private Measurement[] attachHumanComfort(Measurement[] initialResults)
 	{
 		HumanComfortGenerator humanComfortGen = new HumanComfortGenerator();
 		
@@ -74,7 +74,7 @@ public class AjaxController extends HttpServlet {
 		for (Measurement measurement : initialResults) {
 			double temperature = measurement.getValue();
 			
-			double humanComfort = humanComfortGen.calculateHumanComfort(dewPoint, temperature);
+			measurement.setHumanComfort(humanComfortGen.calculateHumanComfort(dewPoint, temperature));
 			//double relative humidity = setRelativeHumidity(humanComfortGen.calculateRelativeHumidity(dewPoint, temperature));
 		}
 		

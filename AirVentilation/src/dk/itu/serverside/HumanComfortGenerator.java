@@ -3,8 +3,6 @@ package dk.itu.serverside;
 // creates relative humidity based on our own metric
 public class HumanComfortGenerator 
 {
-	public 
-	
 	// variables we need:
 	// dewpoint
 	// temperature
@@ -88,23 +86,25 @@ public class HumanComfortGenerator
 		double ArAdu = 0.77; 
 		int factor = 500; 
 		double Iclr = Icl; 
-		double Balance;
-		double E;
+		double Balance = 0.0;
+		double E = 0.0;
 		double Ediff;
 		double Hres;
-		double R;
-		double C;
+		double R = 0.0;
+		double C = 0.0;
+		double fcl = 0.0;
+		double hc = 0.0;
 		
-		do
+		while (Math.abs(Balance) > 0.01);
 		{
-		double fcl=1.05+0.65*Icl;
+		fcl=1.05+0.65*Icl;
 		E=0.42*((M-W)-58);
 		Ediff=3.05*(0.255*Tsk-3.36-Pa);
 		Hres=1.73E-2*M*(5.867-Pa)+1.4E-3*M*(34-Ta);
 		Tcl=Tsk-Icl*(M-W-E-Ediff-Hres-S);      
 		hr=5.67E-8*0.95*ArAdu*(Math.exp(4*Math.log(273+Tcl))-
 		Math.exp(4*Math.log(273+Tr)))/(Tcl-Tr);
-		double hc=12.1*Math.pow(v,0.5);
+		hc=12.1*Math.pow(v,0.5);
 		R = fcl*hr*(Tcl-Tr);
 		C = fcl*hc*(Tcl-Ta);
 		Balance = M-W-E-Ediff-Hres-R-C-S;  
@@ -116,7 +116,6 @@ public class HumanComfortGenerator
 			S=S-factor;
 		}     
 		}
-		while (Math.abs(Balance) > 0.01);
 		
 		S = M-W-E-Ediff-Hres-R-C;
 		

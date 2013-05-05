@@ -24,7 +24,7 @@ $.ajax({
 function setLastReading(data)
 {
 	var lastTemp = data[data.length-1].value;
-	var lastHum = data[data.length-1].relativeHumidity;
+	var lastHum = data[data.length-1].humanComfort;
 	
 	$("#tempLastReading").text(lastTemp.toFixed(2) + "°C");
 	$("#humanComfortLastReading").text(lastHum.toFixed(3) + "%");
@@ -44,7 +44,7 @@ function getHumanComfortData(data)
 {
 	var returnData = [];
 	for (var i = 0; i < data.length; i++) {
-		returnData.push([new Date(data[i].timestamp).getTime(), data[i].relativeHumidity]);
+		returnData.push([new Date(data[i].timestamp).getTime(), data[i].humanComfort]);
 	}
 	
 	return returnData;
@@ -57,11 +57,11 @@ function percentFormatter(v, axis) {
 function drawGraph(data)
 {
 	var temperatureData = getTempAndDate(data);
-	var humidityData = getHumanComfortData(data);
+	var humanComfortData = getHumanComfortData(data);
 	
 	var plot = $.plot("#graphDiv", [
 	                            	{ data: temperatureData, label: "Temperature"},
-	                            	{ data: getHumanComfortData, label: "Human Comfort", yaxis: 2}
+	                            	{ data: humanComfortData, label: "Human Comfort", yaxis: 2}
 	                            ], {
 	                            	series: {
 	                            		lines: {

@@ -4,7 +4,7 @@ public class Measurement {
 	private String uuid;
 	private double value;
 	private String timestamp;
-	private double relativeHumidity;
+	private double humanComfort;
 	
 	public String getUuid() {
 		return uuid;
@@ -25,12 +25,12 @@ public class Measurement {
 		this.timestamp = timestamp;
 	}
 	
-	public void setRelativeHumidity(double rh)
+	public void setHumanComfort(double hc)
 	{
-		this.relativeHumidity = rh;
+		this.humanComfort = hc;
 	}
 	
-	public double RelativeHumidity() {
-		return relativeHumidity;
+	public double HumanComfort() {
+		return humanComfort;
 	}
 }
