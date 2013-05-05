@@ -20,7 +20,7 @@
 				<td>Temperature</td><td><div id="tempLastReading"></div></td>
 			</tr>
 			<tr>
-				<td>Relative Humidity</td><td><div id="humidLastReading"></div></td>
+				<td>Relative Humidity</td><td><div id="humanComfortLastReading"></div></td>
 			</tr>
 		</tbody>
 		</table>

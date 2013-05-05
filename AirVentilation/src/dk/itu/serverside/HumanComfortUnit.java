@@ -1,6 +1,6 @@
 package dk.itu.serverside;
 
-public class Humidity {
+public class HumanComfortUnit {
 	private double value;
 	private String timestamp;
 	

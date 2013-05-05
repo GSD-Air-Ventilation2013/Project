@@ -67,13 +67,15 @@ public class AjaxController extends HttpServlet {
 	
 	private Measurement[] attachRelativeHumidity(Measurement[] initialResults)
 	{
-		HumidityGenerator humidityGen = new HumidityGenerator();
+		HumanComfortGenerator humanComfortGen = new HumanComfortGenerator();
 		
 		Double dewPoint = 10.0;
 		
 		for (Measurement measurement : initialResults) {
 			double temperature = measurement.getValue();
-			measurement.setRelativeHumidity(humidityGen.calculateRelativeHumidity(dewPoint, temperature));
+			
+			double humanComfort = humanComfortGen.calculateHumanComfort(dewPoint, temperature);
+			//double relative humidity = setRelativeHumidity(humanComfortGen.calculateRelativeHumidity(dewPoint, temperature));
 		}
 		
 		return initialResults;

@@ -1,8 +1,10 @@
 package dk.itu.serverside;
 
 // creates relative humidity based on our own metric
-public class HumidityGenerator 
+public class HumanComfortGenerator 
 {
+	public 
+	
 	// variables we need:
 	// dewpoint
 	// temperature
@@ -35,12 +37,19 @@ public class HumidityGenerator
 	}
 	
 	//calculate the relative humidity: actual vapor pressure / saturated vapor pressure
-	public double calculateRelativeHumidity(double dewPoint, double temperature)
+	public double calculateHumanComfort(double dewPoint, double temperature)
 	{
-		return (calculateActualVaporPressure(dewPoint) / calculateSaturatedVaporPressure(temperature)) * 100;
+		double relativeHumidity = (calculateActualVaporPressure(dewPoint) / calculateSaturatedVaporPressure(temperature)) * 100;
+		double pmv = calculatePMV(temperature, relativeHumidity);
+		
+		double pdd = calculatePPD(pmv);
+		
+		return pmv;
 	}
 	
-	public double calculatePMV(double temp, double relativeHumidity)
+	
+	// taken from http://www.lth.se/fileadmin/eat/Termisk_miljoe/PMV-PPD.html
+	private double calculatePMV(double temp, double relativeHumidity)
 	{
 		//M (W/m2), Metabolic energy production (58 to 232 W/m2)
 		int M = 70;

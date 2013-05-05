@@ -27,7 +27,7 @@ function setLastReading(data)
 	var lastHum = data[data.length-1].relativeHumidity;
 	
 	$("#tempLastReading").text(lastTemp.toFixed(2) + "°C");
-	$("#humidLastReading").text(lastHum.toFixed(2) + "%");
+	$("#humanComfortLastReading").text(lastHum.toFixed(3) + "%");
 }
 
 function getTempAndDate(data)
@@ -40,7 +40,7 @@ function getTempAndDate(data)
 	return returnData;
 }
 
-function getHumidityData(data)
+function getHumanComfortData(data)
 {
 	var returnData = [];
 	for (var i = 0; i < data.length; i++) {
@@ -57,11 +57,11 @@ function percentFormatter(v, axis) {
 function drawGraph(data)
 {
 	var temperatureData = getTempAndDate(data);
-	var humidityData = getHumidityData(data);
+	var humidityData = getHumanComfortData(data);
 	
 	var plot = $.plot("#graphDiv", [
 	                            	{ data: temperatureData, label: "Temperature"},
-	                            	{ data: humidityData, label: "Relative Humidity (%)", yaxis: 2}
+	                            	{ data: getHumanComfortData, label: "Human Comfort", yaxis: 2}
 	                            ], {
 	                            	series: {
 	                            		lines: {
@@ -78,7 +78,7 @@ function drawGraph(data)
 	                            	xaxis: {
 	                            	      mode: "time"
 	                            	  },
-	                            	  yaxes: [{ min: 0 },
+	                            	  yaxes: [
 	                            	          {
 	                            		  alignTicksWithAxis: 1,
 	                                      	position: 1,
