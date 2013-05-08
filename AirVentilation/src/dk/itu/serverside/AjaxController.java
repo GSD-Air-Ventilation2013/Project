@@ -37,13 +37,19 @@ public class AjaxController extends HttpServlet {
 			response.setContentType("application/json");
 			PrintWriter out = response.getWriter();
 			
-			if(commandname.equals("getVentilationGain"))
+			if(commandname.equals("getCurrentVentilationGain"))
 			{
 				Measurement[] gainValue = (Measurement[])request.getAttribute("VentilationGain");
 				out.print(gson.toJson(gainValue[0].getValue()));
 			}
+
+			if(commandname.equals("getVentilationGain"))
+			{
+				Measurement[] gainValue = (Measurement[])request.getAttribute("VentilationGain");
+				out.print(gson.toJson(gainValue));
+			}
 			
-			if(commandname.equals("restcall"))
+			if(commandname.equals("getThermalComfort"))
 			{
 				// gets temperature measurements
 				Measurement[] initialResults = (Measurement[]) request.getAttribute("Measurement");
@@ -67,14 +73,14 @@ public class AjaxController extends HttpServlet {
 	
 	private Measurement[] attachHumanComfort(Measurement[] initialResults)
 	{
-		HumanComfortGenerator humanComfortGen = new HumanComfortGenerator();
+		ThermalComfortGenerator thermalComfortGen = new ThermalComfortGenerator();
 		
 		Double dewPoint = 10.0;
 		
 		for (Measurement measurement : initialResults) {
 			double temperature = measurement.getValue();
 			
-			measurement.setHumanComfort(humanComfortGen.calculateHumanComfort(dewPoint, temperature));
+			measurement.setThermalComfort(thermalComfortGen.calculateThermalComfort(dewPoint, temperature));
 			//double relative humidity = setRelativeHumidity(humanComfortGen.calculateRelativeHumidity(dewPoint, temperature));
 		}
 		

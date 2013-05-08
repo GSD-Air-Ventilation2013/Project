@@ -1,24 +1,49 @@
 $(document).ready(function() {
-getGraphData();
+	getGraphData();
 });
 
 function getGraphData()
+{
+	getThermalComfort();
+}
+
+function getThermalComfort()
 {
 $('body').css('cursor', 'wait');
 $.ajax({  
     type: "GET",  
     url: "ajaxcontroller",  
-    data: "cmd=restcall",  
+    data: "cmd=getThermalComfort&minutes=1",  
     contentType: "application/json",
     success: function(result){  
-      drawGraph(result);
-      setLastReading(result);
+      //drawGraph(result);
+      //setLastReading(result);
+    	getACGain(result);
   	$('body').css('cursor', 'auto');
     },
     error:function(result){
         alert("failure");
     }                  
   });  
+}
+
+function getACGain(thermalResult)
+{
+	$('body').css('cursor', 'wait');
+	$.ajax({  
+	    type: "GET",  
+	    url: "ajaxcontroller",  
+	    data: "cmd=getVentilationGain&minutes=1",  
+	    contentType: "application/json",
+	    success: function(result){  
+	      drawGraph(thermalResult, result);
+	      //setLastReading(result);
+	  	$('body').css('cursor', 'auto');
+	    },
+	    error:function(result){
+	        alert("failure");
+	    }                  
+	  });  
 }
 
 function setLastReading(data)
@@ -30,7 +55,7 @@ function setLastReading(data)
 	$("#humanComfortLastReading").text(lastHum.toFixed(3) + "%");
 }
 
-function getTempAndDate(data)
+function getGainAndDate(data)
 {
 	var returnData = [];
 	for (var i = 0; i < data.length; i++) {
@@ -40,11 +65,11 @@ function getTempAndDate(data)
 	return returnData;
 }
 
-function getHumanComfortData(data)
+function getThermalComfortData(data)
 {
 	var returnData = [];
 	for (var i = 0; i < data.length; i++) {
-		returnData.push([new Date(data[i].timestamp).getTime(), data[i].humanComfort]);
+		returnData.push([new Date(data[i].timestamp).getTime(), data[i].thermalComfort]);
 	}
 	
 	return returnData;
@@ -54,14 +79,39 @@ function percentFormatter(v, axis) {
     return v.toFixed(axis.tickDecimals) +"%";
 }
 
-function drawGraph(data)
+var angryUp = 0;
+var angryDown = 0;
+var middle = 0;
+
+function smileyFormatter(v, axis)
 {
-	var temperatureData = getTempAndDate(data);
-	var humanComfortData = getHumanComfortData(data);
+	if(v <= 1 && v >= -1 && middle == 0)
+		{
+		middle++;
+		return "<img style='width:15px;height15px;' src='http://png.findicons.com/files/icons/360/emoticons/128/glad.png'/>";
+		}
+	if(v > 8 && angryUp == 0)
+		{
+		angryUp++;
+		return "<img style='width:15px;height15px;' src='http://png.findicons.com/files/icons/360/emoticons/128/smile_5.png'/>";
+		}
+	
+	if(v <= -6 && angryDown == 0)
+	{
+	angryDown++;
+	return "<img style='width:15px;height15px;' src='http://png.findicons.com/files/icons/360/emoticons/128/smile_5.png'/>";
+	}
+	return "";
+}
+
+function drawGraph(thermalResult, acGainResult)
+{
+	var acGainData = getGainAndDate(acGainResult);
+	var thermalComfortData = getThermalComfortData(thermalResult);
 	
 	var plot = $.plot("#graphDiv", [
-	                            	{ data: temperatureData, label: "Temperature"},
-	                            	{ data: humanComfortData, label: "Human Comfort", yaxis: 2}
+	                            	{ data: acGainData, label: "AC Gain"},
+	                            	{ data: thermalComfortData, label: "Thermal Comfort", yaxis: 2}
 	                            ], {
 	                            	series: {
 	                            		lines: {
@@ -80,9 +130,15 @@ function drawGraph(data)
 	                            	  },
 	                            	  yaxes: [
 	                            	          {
-	                            		  alignTicksWithAxis: 1,
+	                                      	min: 0,
+	                                      	max: 1
+	                                    },
+	                                    {
 	                                      	position: 1,
-	                                      	tickFormatter: percentFormatter
+	                                    	axisLabelPadding: 1,
+	                                      	min: -12,
+	                                      	max: 10,
+	                                      	tickFormatter: smileyFormatter
 	                                    }
 	                            	          ],
 	                                          legend: { position: 'ne' },

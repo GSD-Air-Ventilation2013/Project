@@ -1,6 +1,6 @@
 package dk.itu.serverside;
 
-public class HumanComfortUnit {
+public class ThermalComfortUnit {
 	private double value;
 	private String timestamp;
 	

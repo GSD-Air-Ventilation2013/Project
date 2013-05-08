@@ -1,7 +1,7 @@
 package dk.itu.serverside;
 
 // creates relative humidity based on our own metric
-public class HumanComfortGenerator 
+public class ThermalComfortGenerator 
 {
 	// variables we need:
 	// dewpoint
@@ -35,7 +35,7 @@ public class HumanComfortGenerator
 	}
 	
 	//calculate the relative humidity: actual vapor pressure / saturated vapor pressure
-	public double calculateHumanComfort(double dewPoint, double temperature)
+	public double calculateThermalComfort(double dewPoint, double temperature)
 	{
 		double relativeHumidity = (calculateActualVaporPressure(dewPoint) / calculateSaturatedVaporPressure(temperature)) * 100;
 		double pmv = calculatePMV(temperature, relativeHumidity);

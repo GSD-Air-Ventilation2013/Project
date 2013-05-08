@@ -37,19 +37,21 @@ public class RestClient {
 		return gson.fromJson(json, String.class);
 	}
 	
-	public Measurement[] getVentilationGain(String uuid)
+	public Measurement[] getVentilationGain(String uuid, String value)
 	{
+		String limit = Integer.toString(Integer.parseInt(value) * 4 + 1);
+		
 		Gson gson = new GsonBuilder()
 		.registerTypeAdapter(Measurement[].class, new MeasurementDeserializer())
 		.create();
 		
-		String json = getJsonString(MEASURE_URL, "1", uuid);
+		String json = getJsonString(MEASURE_URL, limit, uuid);
 		return gson.fromJson(json, Measurement[].class);
 	}
 	
-	public Measurement[] getMeasurements(String uuid, int numOfMinutes) {
+	public Measurement[] getMeasurements(String uuid, String numOfMinutes) {
 		//Measurements are taken every 15 seconds. Request limit is calculated.
-		String limit = Integer.toString(numOfMinutes * 4 + 1);
+		String limit = Integer.toString(Integer.parseInt(numOfMinutes) * 4 + 1);
 		
 		Gson gson = new GsonBuilder()
 		.registerTypeAdapter(Measurement[].class, new MeasurementDeserializer())

@@ -3,7 +3,7 @@ function getVentilationGain()
 	$.ajax({  
 	    type: "GET",  
 	    url: "ajaxcontroller",  
-	    data: "cmd=getVentilationGain",  
+	    data: "cmd=getCurrentVentilationGain&minutes=1",  
 	    contentType: "application/json",
 	    success: function(result){
 	    	setSlider(result);

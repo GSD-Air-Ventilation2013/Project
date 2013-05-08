@@ -4,7 +4,7 @@ public class Measurement {
 	private String uuid;
 	private double value;
 	private String timestamp;
-	private double humanComfort;
+	private double thermalComfort;
 	
 	public String getUuid() {
 		return uuid;
@@ -25,12 +25,12 @@ public class Measurement {
 		this.timestamp = timestamp;
 	}
 	
-	public void setHumanComfort(double hc)
+	public void setThermalComfort(double hc)
 	{
-		this.humanComfort = hc;
+		this.thermalComfort = hc;
 	}
 	
-	public double HumanComfort() {
-		return humanComfort;
+	public double ThermalComfort() {
+		return thermalComfort;
 	}
 }

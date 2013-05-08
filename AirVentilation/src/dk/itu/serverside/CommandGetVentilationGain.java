@@ -14,7 +14,8 @@ public class CommandGetVentilationGain extends Command {
 	@Override
 	public String execute(HttpServletRequest request) throws Exception {
 		RestClient client = new RestClient();
-		Measurement[] gain = client.getVentilationGain("room-0-ac-0-gain");
+		String value = request.getParameter("minutes");
+		Measurement[] gain = client.getVentilationGain("room-0-ac-0-gain", value);
 		request.setAttribute("VentilationGain", gain);
 		return next;
 	}
