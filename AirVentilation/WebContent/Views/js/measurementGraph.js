@@ -1,5 +1,7 @@
 $(document).ready(function() {
 	getGraphData();
+	//getCurrentHeaterGain();
+	//getVentilationGain();
 });
 
 function getGraphData()
@@ -19,12 +21,31 @@ $.ajax({
       //drawGraph(result);
       //setLastReading(result);
     	getACGain(result);
-  	$('body').css('cursor', 'auto');
     },
     error:function(result){
         alert("failure");
     }                  
   });  
+}
+
+function getHeaterGain(thermalResult, acResult)
+{
+	$('body').css('cursor', 'wait');
+	$.ajax({  
+	    type: "GET",  
+	    url: "ajaxcontroller",  
+	    data: "cmd=getHeaterGain&minutes=1",  
+	    contentType: "application/json",
+	    success: function(result){  
+	    	
+	      drawGraph(thermalResult, acResult, result);
+	      setSliderHeater(result[0].value);
+	      //setLastReading(result);
+	    },
+	    error:function(result){
+	        alert("failure");
+	    }                  
+	  });  
 }
 
 function getACGain(thermalResult)
@@ -36,9 +57,10 @@ function getACGain(thermalResult)
 	    data: "cmd=getVentilationGain&minutes=1",  
 	    contentType: "application/json",
 	    success: function(result){  
-	      drawGraph(thermalResult, result);
+	    	getHeaterGain(thermalResult, result);
+	      //drawGraph(thermalResult, result);
 	      //setLastReading(result);
-	  	$('body').css('cursor', 'auto');
+	    	setSlider(result[0].value);
 	    },
 	    error:function(result){
 	        alert("failure");
@@ -65,6 +87,16 @@ function getGainAndDate(data)
 	return returnData;
 }
 
+function getHeaterData(data)
+{
+	var returnData = [];
+	for (var i = 0; i < data.length; i++) {
+		returnData.push([new Date(data[i].timestamp).getTime(), data[i].value]);
+	}
+	
+	return returnData;
+}
+
 function getThermalComfortData(data)
 {
 	var returnData = [];
@@ -79,39 +111,70 @@ function percentFormatter(v, axis) {
     return v.toFixed(axis.tickDecimals) +"%";
 }
 
-var angryUp = 0;
-var angryDown = 0;
-var middle = 0;
-
 function smileyFormatter(v, axis)
 {
-	if(v <= 1 && v >= -1 && middle == 0)
+	if(v == 0)
 		{
-		middle++;
 		return "<img style='width:15px;height15px;' src='http://png.findicons.com/files/icons/360/emoticons/128/glad.png'/>";
 		}
-	if(v > 8 && angryUp == 0)
+	if(v == 7.5)
 		{
-		angryUp++;
-		return "<img style='width:15px;height15px;' src='http://png.findicons.com/files/icons/360/emoticons/128/smile_5.png'/>";
+		return "<img style='width:20px;height20px;' src='http://png.findicons.com/files/icons/360/emoticons/128/smile_5.png'/>";
 		}
 	
-	if(v <= -6 && angryDown == 0)
+	if(v == -7.5)
 	{
-	angryDown++;
-	return "<img style='width:15px;height15px;' src='http://png.findicons.com/files/icons/360/emoticons/128/smile_5.png'/>";
+	return "<img style='width:20px;height20px;' src='http://png.findicons.com/files/icons/360/emoticons/128/glad.png'/>";
 	}
-	return "";
+	return v;
 }
 
-function drawGraph(thermalResult, acGainResult)
+function test(v, axis)
+{
+	return v+"%";
+	}
+
+function setInfotable(latestAcGain, latestHeaterGain)
+{
+	var ac = latestAcGain * 100;
+	var heat = latestHeaterGain * 100;
+	
+	$("#currentAC").text(ac.toFixed(0));
+	$("#currentHeating").text(heat.toFixed(0));
+	
+	var action = getRecommendedAction(ac, heat);
+	
+	$("#recommendedAction").text(action);
+}
+
+function getRecommendedAction(ac, heat)
+{
+	$.ajax({  
+	    type: "GET",  
+	    url: "ajaxcontroller",  
+	    data: "cmd=getRecommendedAction&ac=" + ac + "&heat="+heat,  
+	    contentType: "application/json",
+	    success: function(result){  
+	    	return result;
+	    },
+	    error:function(result){
+	        alert("failure");
+	    }                  
+	  }); 
+}
+
+function drawGraph(thermalResult, acGainResult, heaterGain)
 {
 	var acGainData = getGainAndDate(acGainResult);
 	var thermalComfortData = getThermalComfortData(thermalResult);
+	var heaterGainData = getHeaterData(heaterGain);
+	
+	setInfotable(acGainResult[0].value, heaterGain[0].value);
 	
 	var plot = $.plot("#graphDiv", [
 	                            	{ data: acGainData, label: "AC Gain"},
-	                            	{ data: thermalComfortData, label: "Thermal Comfort", yaxis: 2}
+	                            	{ data: thermalComfortData, label: "Thermal Comfort", yaxis: 2},
+	                            	{data: heaterGainData, label: "Heater Gain", yaxis: 2}
 	                            ], {
 	                            	series: {
 	                            		lines: {
@@ -131,13 +194,14 @@ function drawGraph(thermalResult, acGainResult)
 	                            	  yaxes: [
 	                            	          {
 	                                      	min: 0,
-	                                      	max: 1
+	                                      	max: 1,
+	                                      	tickformatter: test
 	                                    },
 	                                    {
 	                                      	position: 1,
 	                                    	axisLabelPadding: 1,
-	                                      	min: -12,
-	                                      	max: 10,
+	                                      	min: -8,
+	                                      	max: 8,
 	                                      	tickFormatter: smileyFormatter
 	                                    }
 	                            	          ],
@@ -149,41 +213,8 @@ function drawGraph(thermalResult, acGainResult)
 	
 
 	bindHover();
-}
 
-function drawGraphOLD()
-{
-	var sin = [],
-	cos = [];
-
-for (var i = 0; i < 14; i += 0.5) {
-	sin.push([i, Math.sin(i)]);
-	cos.push([i, Math.cos(i)]);
-}
-
-var plot = $.plot("#graphDiv", [
-	{ data: sin, label: "sin(x)"},
-	{ data: cos, label: "cos(x)"}
-], {
-	series: {
-		lines: {
-			show: true
-		},
-		points: {
-			show: true
-		}
-	},
-	grid: {
-		hoverable: true,
-		clickable: true
-	},
-	yaxis: {
-		min: -1.2,
-		max: 1.2
-	},
-	width: 700,
-	height: 350
-});
+  	$('body').css('cursor', 'auto');
 }
 
 function showTooltip(x, y, contents) {

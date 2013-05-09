@@ -19,6 +19,10 @@ public class ApplicationController {
 			commands.put("setVentilationGain", new CommandSetVentilationGain("Views/restcallresult.jsp"));
 			commands.put("getCurrentVentilationGain", new CommandGetVentilationGain("Views/restcallresult.jsp"));
 			commands.put("getVentilationGain", new CommandGetVentilationGain("Views/restcallresult.jsp"));
+			commands.put("getHeaterGain", new CommandGetHeaterGain("Views/restcallresult.jsp"));
+			commands.put("setHeaterGain", new CommandSetHeaterGain("Views/restcallresult.jsp"));
+			commands.put("getCurrentHeaterGain", new CommandGetHeaterGain("Views/restcallresult.jsp"));
+			commands.put("getRecommendedAction", new CommandGetRecommendedAction("Views/restcallresult.jsp"));
 		} catch (Exception e) {
 			System.out.println("Exception in Application Controller- Panic Situation");
 		}

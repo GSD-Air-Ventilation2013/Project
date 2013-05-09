@@ -2,6 +2,7 @@
 <%@ page import="java.lang.*"%>
 <script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/measurementGraph.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/controlVentilation.js" ></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/controlHeating.js" ></script>
 <section id="content" class="body">
 	<h2>Visual representation</h2>
 	<div id="graphDiv" ></div>
@@ -17,10 +18,13 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td>Temperature</td><td><div id="tempLastReading"></div></td>
+				<td>Current AC gain</td><td><div id="currentAC"></div></td>
 			</tr>
 			<tr>
-				<td>Relative Humidity</td><td><div id="humanComfortLastReading"></div></td>
+				<td>Current Heater Gain</td><td><div id="currentHeating"></div></td>
+			</tr>
+			<tr>
+				<td>Recommended action:</td><td><div id="recommendedAction"></div></td>
 			</tr>
 		</tbody>
 		</table>
@@ -29,7 +33,7 @@
 	<table>
 	<tr>
 	<td>
-	<label>Gain:</label>
+	<label style="margin-bottom: 5px;">AC:</label>
 	</td>
 	</tr>
 	<tr>
@@ -37,17 +41,33 @@
 	<label id="lblDisable" style="font-size: xx-small;"></label>
 	</td>
 	</tr>
-	</table>
-	<input type="text" id="amount" style="border: 0; font-weight: bold;">
-	</p>
+	<tr>
+	<td>
+	<label id="amount" style="border: 0; font-weight: bold;"></label>
 	<div id="slider-vertical"></div>
+	</td>
+	</tr>
+	</table>
 	
-<div>
-<form action="">
-<input disabled="disabled" id="radioOn" type="radio" name="onOff" value="On" checked="checked">On
-<input disabled="disabled" id="radioOff" type="radio" name="onOff" value="Off">Off
-</form>
-</div>
+	<table style="float: left;">
+	<tr>
+	<td>
+	<label>Heater:</label>
+	</td>
+	</tr>
+	<tr>
+	<td>
+	<label id="lblDisableHeater" style="font-size: xx-small;"></label>
+	</td>
+	</tr>
+	<tr>
+	<td>
+	<label id="amountHeater" style="border: 0; font-weight: bold;"></label>
+	<div id="slider-vertical-heater"></div>
+	</td>
+	</tr>
+	</table>
+	
 </div>
 </section>
 

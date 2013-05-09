@@ -36,6 +36,18 @@ public class RestClient {
 		
 		return gson.fromJson(json, String.class);
 	}
+
+
+	public Measurement[] getHeaterGain(String uuid, String value) {
+		String limit = Integer.toString(Integer.parseInt(value) * 4 + 1);
+		
+		Gson gson = new GsonBuilder()
+		.registerTypeAdapter(Measurement[].class, new MeasurementDeserializer())
+		.create();
+		
+		String json = getJsonString(MEASURE_URL, limit, uuid);
+		return gson.fromJson(json, Measurement[].class);
+	}
 	
 	public Measurement[] getVentilationGain(String uuid, String value)
 	{

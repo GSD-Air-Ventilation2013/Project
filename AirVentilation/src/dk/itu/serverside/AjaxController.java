@@ -36,6 +36,24 @@ public class AjaxController extends HttpServlet {
 			Gson gson = new Gson();
 			response.setContentType("application/json");
 			PrintWriter out = response.getWriter();
+
+			if(commandname.equals("getRecommendedAction"))
+			{
+				String action = (String)request.getAttribute("RecommendedAction");
+				out.print(gson.toJson(action));
+			}
+			
+			if(commandname.equals("getHeaterGain"))
+			{
+				Measurement[] gainValue = (Measurement[])request.getAttribute("HeaterGain");
+				out.print(gson.toJson(gainValue));
+			}
+
+			if(commandname.equals("getCurrentHeaterGain"))
+			{
+				Measurement[] gainValue = (Measurement[])request.getAttribute("HeaterGain");
+				out.print(gson.toJson(gainValue[0].getValue()));
+			}
 			
 			if(commandname.equals("getCurrentVentilationGain"))
 			{

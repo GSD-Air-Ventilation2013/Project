@@ -1,14 +1,12 @@
-
-
-function getVentilationGain()
+function getCurrentHeaterGain()
 {
 	$.ajax({  
 	    type: "GET",  
 	    url: "ajaxcontroller",  
-	    data: "cmd=getCurrentVentilationGain&minutes=1",  
+	    data: "cmd=getCurrentHeaterGain&minutes=1",  
 	    contentType: "application/json",
 	    success: function(result){
-	    	setSlider(result);
+	    	setSliderHeater(result);
 	    },
 	    error:function(result){
 	        alert("failure");
@@ -16,7 +14,7 @@ function getVentilationGain()
 	  }); 
 }
 
-function setSliderValueInterval(value)
+function setSliderValueIntervalHeater(value)
 {
 	if(value.length == 1)
 		{
@@ -28,52 +26,52 @@ function setSliderValueInterval(value)
 		}
 }
 
-function setSlider(sliderValue)
+function setSliderHeater(sliderValue)
 {
-	$( "#slider-vertical" ).slider({
+	$( "#slider-vertical-heater" ).slider({
 		orientation: "vertical",
 		range: "min",
 		min: 0,
 		max: 100,
 		value: sliderValue*100,
 		slide: function( event, ui ) {
-			$( "#amount" ).text( ui.value );
+			$( "#amountHeater" ).text( ui.value );
 		},
 		stop: function ( event, ui ){
 			var val = ui.value/100;
-			setGain(val.toFixed(2));
+			setGainHeater(val.toFixed(2));
 		}
 	});
-	$( "#amount" ).text( $( "#slider-vertical" ).slider( "value" ) );
+	$( "#amountHeater" ).text( $( "#slider-vertical-heater" ).slider( "value" ) );
 	}
 
-function setCountDown(seconds)
+function setCountDownHeater(seconds)
 {
-	$("#lblDisable").text("Disabled for " + seconds);
+	$("#lblDisableHeater").text("Disabled for " + seconds);
 	if(seconds > 0)
 		{
-			setTimeout(function() {setCountDown(seconds - 1);}, 1000);
+			setTimeout(function() {setCountDownHeater(seconds - 1);}, 1000);
 		}
 	else
 		{
-			$("#lblDisable").hide(); 
+			$("#lblDisableHeater").hide(); 
 			return;
 		}
 }
 
-function setGain(value)
+function setGainHeater(value)
 {
 	$('body').css('cursor', 'wait');
 	$.ajax({  
 	    type: "GET",  
 	    url: "ajaxcontroller",  
-	    data: "cmd=setVentilationGain&gainValue="+value,  
+	    data: "cmd=setHeaterGain&gainValue="+value,  
 	    contentType: "application/json",
 	    success: function(result){
-	    	$("#slider-vertical").slider('disable');
-	    	$("#lblDisable").show();
-	    	setCountDown(20);
-	    	setTimeout(function(){$("#slider-vertical").slider('enable');}, 20000 );
+	    	$("#slider-vertical-heater").slider('disable');
+	    	$("#lblDisableHeater").show();
+	    	setCountDownHeater(20);
+	    	setTimeout(function(){$("#slider-vertical-heater").slider('enable');}, 20000 );
 
 	    	$('body').css('cursor', 'auto');
 	    },

@@ -12,5 +12,10 @@
 #divContent div
 {
 	float: left;
-	margin-right: 120px;
+	margin-right: 60px;
+}
+
+#divContent table
+{
+	float: left;
 }
