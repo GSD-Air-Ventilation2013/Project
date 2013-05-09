@@ -134,7 +134,7 @@ function test(v, axis)
 	return v+"%";
 	}
 
-function setInfotable(latestAcGain, latestHeaterGain)
+function setInfotable(latestAcGain, latestHeaterGain, latestTc)
 {
 	var ac = latestAcGain * 100;
 	var heat = latestHeaterGain * 100;
@@ -142,20 +142,18 @@ function setInfotable(latestAcGain, latestHeaterGain)
 	$("#currentAC").text(ac.toFixed(0));
 	$("#currentHeating").text(heat.toFixed(0));
 	
-	var action = getRecommendedAction(ac, heat);
-	
-	$("#recommendedAction").text(action);
+	var action = getRecommendedAction(ac, heat, latestTc);
 }
 
-function getRecommendedAction(ac, heat)
+function getRecommendedAction(ac, heat, tc)
 {
 	$.ajax({  
 	    type: "GET",  
 	    url: "ajaxcontroller",  
-	    data: "cmd=getRecommendedAction&ac=" + ac + "&heat="+heat,  
+	    data: "cmd=getRecommendedAction&ac=" + ac + "&heat="+heat + "&tc=" + tc,  
 	    contentType: "application/json",
 	    success: function(result){  
-	    	return result;
+	    	$("#recommendedAction").text(result);
 	    },
 	    error:function(result){
 	        alert("failure");
@@ -169,7 +167,7 @@ function drawGraph(thermalResult, acGainResult, heaterGain)
 	var thermalComfortData = getThermalComfortData(thermalResult);
 	var heaterGainData = getHeaterData(heaterGain);
 	
-	setInfotable(acGainResult[0].value, heaterGain[0].value);
+	setInfotable(acGainResult[acGainResult.length - 1].value, heaterGain[heaterGain.length - 1].value, thermalResult[thermalResult.length - 1].thermalComfort);
 	
 	var plot = $.plot("#graphDiv", [
 	                            	{ data: acGainData, label: "AC Gain"},

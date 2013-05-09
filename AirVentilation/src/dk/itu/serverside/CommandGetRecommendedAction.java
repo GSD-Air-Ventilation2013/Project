@@ -12,9 +12,12 @@ public class CommandGetRecommendedAction extends Command {
 
 		String ac = request.getParameter("ac");
 		String heat = request.getParameter("heat");
+		String tc = request.getParameter("tc");
 		String action = "TEST";
 		
 		PolicyHandler policyHandler = new PolicyHandler();
+		
+		action = policyHandler.getRecommendedAction(ac, heat, tc);
 		
 		request.setAttribute("RecommendedAction", action);
 		return next;
