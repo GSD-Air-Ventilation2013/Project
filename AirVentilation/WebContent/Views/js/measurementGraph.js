@@ -9,6 +9,8 @@ function getGraphData()
 	getThermalComfort();
 }
 
+var temperatureData;
+
 function getThermalComfort()
 {
 $('body').css('cursor', 'wait');
@@ -21,11 +23,22 @@ $.ajax({
       //drawGraph(result);
       //setLastReading(result);
     	getACGain(result);
+    	setTemperatureData(result);
     },
     error:function(result){
         alert("failure");
     }                  
   });  
+}
+
+function setTemperatureData(data)
+{
+	var result = [];
+	for (var i = 0; i < data.length; i++) {
+		result.push(data[i].value);
+	}
+	
+	temperatureData = result;
 }
 
 function getHeaterGain(thermalResult, acResult)
@@ -39,7 +52,7 @@ function getHeaterGain(thermalResult, acResult)
 	    success: function(result){  
 	    	
 	      drawGraph(thermalResult, acResult, result);
-	      setSliderHeater(result[0].value);
+	      setSliderHeater(result[result.length - 1].value);
 	      //setLastReading(result);
 	    },
 	    error:function(result){
@@ -60,7 +73,7 @@ function getACGain(thermalResult)
 	    	getHeaterGain(thermalResult, result);
 	      //drawGraph(thermalResult, result);
 	      //setLastReading(result);
-	    	setSlider(result[0].value);
+	    	setSlider(result[result.length - 1].value);
 	    },
 	    error:function(result){
 	        alert("failure");
@@ -161,18 +174,20 @@ function getRecommendedAction(ac, heat, tc)
 	  }); 
 }
 
+var acGainData;
+var heaterGainData;
+var thermalComfortData;
+
 function drawGraph(thermalResult, acGainResult, heaterGain)
 {
-	var acGainData = getGainAndDate(acGainResult);
-	var thermalComfortData = getThermalComfortData(thermalResult);
-	var heaterGainData = getHeaterData(heaterGain);
+	acGainData = getGainAndDate(acGainResult);
+	thermalComfortData = getThermalComfortData(thermalResult);
+	heaterGainData = getHeaterData(heaterGain);
 	
 	setInfotable(acGainResult[acGainResult.length - 1].value, heaterGain[heaterGain.length - 1].value, thermalResult[thermalResult.length - 1].thermalComfort);
 	
 	var plot = $.plot("#graphDiv", [
-	                            	{ data: acGainData, label: "AC Gain"},
-	                            	{ data: thermalComfortData, label: "Thermal Comfort", yaxis: 2},
-	                            	{data: heaterGainData, label: "Heater Gain", yaxis: 2}
+	                            	{data: thermalComfortData, label: "Thermal Comfort", yaxis: 2}
 	                            ], {
 	                            	series: {
 	                            		lines: {
@@ -192,8 +207,7 @@ function drawGraph(thermalResult, acGainResult, heaterGain)
 	                            	  yaxes: [
 	                            	          {
 	                                      	min: 0,
-	                                      	max: 1,
-	                                      	tickformatter: test
+	                                      	max: 1
 	                                    },
 	                                    {
 	                                      	position: 1,
@@ -215,8 +229,17 @@ function drawGraph(thermalResult, acGainResult, heaterGain)
   	$('body').css('cursor', 'auto');
 }
 
-function showTooltip(x, y, contents) {
-	$("<div id='tooltip'>" + contents + "</div>").css({
+function showTooltip(x, y, index, contents) {
+	
+	var acGain = acGainData[index][1] * 100;
+	var heaterGain = heaterGainData[index][1] * 100;
+	var tcLevel = thermalComfortData[index][1];
+	var temperature = temperatureData[index].toFixed(1);
+	
+	var newContent = "<table><tr><td>Ac: " + acGain + "%</td></tr>" + "<tr><td>Heater: " + heaterGain+"%</td></tr>" +
+			"<tr><td>Thermal Comfort: " + tcLevel + "</td></tr><tr><td>" + temperature + "°C</td></tr></table>";
+	
+	$("<div id='tooltip'>" + newContent + "</div>").css({
 		position: "absolute",
 		display: "none",
 		top: y + 5,
@@ -239,7 +262,7 @@ $("#graphDiv").bind("plothover", function (event, pos, item) {
 			var x = item.datapoint[0],
 			y = item.datapoint[1].toFixed(2);
 
-			showTooltip(item.pageX, item.pageY,
+			showTooltip(item.pageX, item.pageY, previousPoint,
 			    item.series.label + ": " + y + " </br>Timestamp: " + new Date(x));
 		}
 	} else {

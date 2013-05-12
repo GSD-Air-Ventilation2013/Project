@@ -16,6 +16,9 @@ public class PolicyHandler {
 	
 	private static final String appropriate = "Sit back, relax";
 	
+	private static final String highTcDefault = "Decrease the temeperature, either by turning down the heater or turning up the AC";
+	private static final String lowTcDefault = "Increase the temeperature, either by turning up the heater or turning down the AC";
+	
 	public String getRecommendedAction(String ac, String heat, String tc) {
 		int thermalComfort = Integer.parseInt(tc);
 		double heatGain = Double.parseDouble(heat);	
@@ -61,6 +64,8 @@ public class PolicyHandler {
 				
 				return "high ac medium heating";
 			}
+			
+			return highTcDefault;
 		}
 		
 		//
@@ -103,6 +108,8 @@ public class PolicyHandler {
 				
 				return "high ac medium heating";
 			}
+			
+			return lowTcDefault;
 		}
 		
 		return appropriate;

@@ -4,7 +4,7 @@
 <script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/controlVentilation.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/Views/js/controlHeating.js" ></script>
 <section id="content" class="body">
-	<h2>Visual representation</h2>
+	<h2>Building 3, Room 0</h2>
 	<div id="graphDiv" ></div>
 </section>
 <section id="content" class="body">
@@ -38,7 +38,7 @@
 	</tr>
 	<tr>
 	<td>
-	<label id="lblDisable" style="font-size: xx-small;"></label>
+	<label id="lblDisable" style="font-size: xx-small; height: 25px;"></label>
 	</td>
 	</tr>
 	<tr>
@@ -57,7 +57,7 @@
 	</tr>
 	<tr>
 	<td>
-	<label id="lblDisableHeater" style="font-size: xx-small;"></label>
+	<label id="lblDisableHeater" style="font-size: xx-small; height: 25px;"></label>
 	</td>
 	</tr>
 	<tr>
