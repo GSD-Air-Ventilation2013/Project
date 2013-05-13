@@ -39,9 +39,6 @@ public class ThermalComfortGenerator
 	{
 		double relativeHumidity = (calculateActualVaporPressure(dewPoint) / calculateSaturatedVaporPressure(temperature)) * 100;
 		double pmv = calculatePMV(temperature, relativeHumidity);
-		
-		double pdd = calculatePPD(pmv);
-		
 		return pmv;
 	}
 	

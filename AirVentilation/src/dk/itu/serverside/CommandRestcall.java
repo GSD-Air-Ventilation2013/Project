@@ -14,7 +14,7 @@ public class CommandRestcall extends Command {
 	public String execute(HttpServletRequest request) {
 		RestClient client = new RestClient();
 		String value = request.getParameter("minutes");
-		Measurement[] temperatures = client.getMeasurements("floor-0-room-1.temp", value);
+		Measurement[] temperatures = client.getMeasurements("floor-0-room-0.temp", value);
 		request.setAttribute("Measurement", temperatures);
 		return next;
 	}

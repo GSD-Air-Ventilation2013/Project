@@ -5,6 +5,17 @@ public class Measurement {
 	private double value;
 	private String timestamp;
 	private double thermalComfort;
+	private double predictedPercentageDissatisfied;
+	
+	public double getPPD()
+	{
+		return this.predictedPercentageDissatisfied;
+	}
+	
+	public void setPDD(double pdd)
+	{
+		this.predictedPercentageDissatisfied = pdd;
+	}
 	
 	public String getUuid() {
 		return uuid;
@@ -30,7 +41,7 @@ public class Measurement {
 		this.thermalComfort = hc;
 	}
 	
-	public double ThermalComfort() {
+	public double getThermalComfort() {
 		return thermalComfort;
 	}
 }

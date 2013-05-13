@@ -73,7 +73,7 @@ public class AjaxController extends HttpServlet {
 				Measurement[] initialResults = (Measurement[]) request.getAttribute("Measurement");
 				
 				initialResults = attachHumanComfort(initialResults);
-				
+				initialResults = attachPDD(initialResults);
 
 				out.print(gson.toJson(initialResults));
 			}
@@ -89,6 +89,18 @@ public class AjaxController extends HttpServlet {
 		}
 	}
 	
+	private Measurement[] attachPDD(Measurement[] initialResults) {
+		ThermalComfortGenerator thermalComfortGen = new ThermalComfortGenerator();
+		
+		for (Measurement measurement : initialResults) {
+			double pmv = measurement.getThermalComfort();
+			
+			measurement.setPDD(thermalComfortGen.calculatePPD(pmv));
+		}
+		
+		return initialResults;
+	}
+
 	private Measurement[] attachHumanComfort(Measurement[] initialResults)
 	{
 		ThermalComfortGenerator thermalComfortGen = new ThermalComfortGenerator();
@@ -99,8 +111,7 @@ public class AjaxController extends HttpServlet {
 			double temperature = measurement.getValue();
 			
 			measurement.setThermalComfort(thermalComfortGen.calculateThermalComfort(dewPoint, temperature));
-			//double relative humidity = setRelativeHumidity(humanComfortGen.calculateRelativeHumidity(dewPoint, temperature));
-		}
+			}
 		
 		return initialResults;
 	}

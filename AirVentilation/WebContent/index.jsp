@@ -24,7 +24,7 @@
 				<td>Current Heater Gain</td><td><div id="currentHeating"></div></td>
 			</tr>
 			<tr>
-				<td>Recommended action:</td><td><div id="recommendedAction"></div></td>
+				<td>Status & Recommended action:</td><td><div id="recommendedAction"></div></td>
 			</tr>
 		</tbody>
 		</table>
