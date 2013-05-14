@@ -130,14 +130,14 @@ function smileyFormatter(v, axis)
 		{
 		return "<img style='width:15px;height15px;' src='http://png.findicons.com/files/icons/360/emoticons/128/glad.png'/>";
 		}
-	if(v == 7.5)
+	if(v == 3)
 		{
-		return "<img style='width:20px;height20px;' src='http://png.findicons.com/files/icons/360/emoticons/128/smile_5.png'/>";
+		return "<img style='width:22px;height22px;' src='http://png.findicons.com/files/icons/360/emoticons/128/smile_5.png'/>";
 		}
 	
-	if(v == -7.5)
+	if(v == -3)
 	{
-	return "<img style='width:20px;height20px;' src='http://png.findicons.com/files/icons/360/emoticons/128/glad.png'/>";
+	return "<img style='width:25px;height25px;' src='http://png.findicons.com/files/icons/360/emoticons/128/smile_5.png'/>";
 	}
 	return v;
 }
@@ -212,8 +212,8 @@ function drawGraph(thermalResult, acGainResult, heaterGain)
 	                                    {
 	                                      	position: 1,
 	                                    	axisLabelPadding: 1,
-	                                      	min: -8,
-	                                      	max: 8,
+	                                      	min: -3,
+	                                      	max: 3,
 	                                      	tickFormatter: smileyFormatter
 	                                    }
 	                            	          ],

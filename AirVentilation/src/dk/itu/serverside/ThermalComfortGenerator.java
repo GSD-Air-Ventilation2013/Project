@@ -58,8 +58,11 @@ public class ThermalComfortGenerator
 		//Ta (C), Ambient air temperature (10-30)
 		double Ta = temp;
 		
+		// operative temperature (static)
+		double To = 24.0;
+		
 		//Tr (C), Mean radiant temperature (often close to ambient air temperature)
-		double Tr = Ta;
+		double Tr = 2*To - temp;
 		
 		//rh (%), Relative humidity
 		double rh = relativeHumidity;
