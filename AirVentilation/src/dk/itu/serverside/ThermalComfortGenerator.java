@@ -59,7 +59,7 @@ public class ThermalComfortGenerator
 		double Ta = temp;
 		
 		// operative temperature (static)
-		double To = 24.0;
+		double To = 24.5;
 		
 		//Tr (C), Mean radiant temperature (often close to ambient air temperature)
 		double Tr = 2*To - temp;
